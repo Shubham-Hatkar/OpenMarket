@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -30,6 +31,10 @@ public class OrderService
 
     @Autowired
     ItemService itemService;
+
+    @Autowired
+    EmailService emailService;
+
 
     public OrderResponseDto placeOrder(OrderRequestDto orderRequestDto) throws CustomerDoesNotExistException, ProductNotFoundException, InsufficientQuantityException {
         Customer customer;
@@ -72,7 +77,6 @@ public class OrderService
         String cardNo = "";
         for(int i = 0; i < card.getCardNo().length() - 4; i++) cardNo += "X";
         cardNo += card.getCardNo().substring(card.getCardNo().length() - 4);
-
         order.setCardUsedForPayment(cardNo);
 
         Item item = new Item();
@@ -82,10 +86,6 @@ public class OrderService
         order.getItemList().add(item);
         order.setCustomer(customer);
 
-        customer.getOrderedList().add(order);
-        Customer savedCustomer =  customerRepository.save(customer);
-        Ordered savedOrder = savedCustomer.getOrderedList().get(savedCustomer.getOrderedList().size() - 1);
-
         int leftQuantity = product.getQuantity() - orderRequestDto.getRequiredQuantity();
         if(leftQuantity <= 0)
         {
@@ -93,11 +93,28 @@ public class OrderService
         }
         product.setQuantity(leftQuantity);
 
+        customer.getOrderedList().add(order);
+        Customer savedCustomer =  customerRepository.save(customer);
+        Ordered savedOrder = savedCustomer.getOrderedList().get(savedCustomer.getOrderedList().size() - 1);
+
+
+        // Send an email
+        String subject = "Order Placed Successfully";
+        String message = "Congrats your order with total value " + totalCost + " has been placed.";
+
+        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+        simpleMailMessage.setText(message);
+        simpleMailMessage.setFrom("openmarket@gmail.com");
+        simpleMailMessage.setTo(customer.getEmail());
+        simpleMailMessage.setSubject(subject);
+        emailService.sendEmail(simpleMailMessage);
+
+        //emailService.sendEmail(customer.getEmail(),subject,message);
 
         //prepare ResponseDto
         OrderResponseDto orderResponseDto = OrderResponseDto.builder()
                 .productName(product.getName())
-                .orderDate(order.getOrderDate())
+                .orderDate(savedOrder.getOrderDate())
                 .orderedQuantity(orderRequestDto.getRequiredQuantity())
                 .cardUsedForPayment(cardNo)
                 .itemPrice(product.getPrice())
