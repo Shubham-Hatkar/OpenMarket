@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class AddProductResponseDto
+public class ProductResponseDto
 {
     private String name;
     private int price;

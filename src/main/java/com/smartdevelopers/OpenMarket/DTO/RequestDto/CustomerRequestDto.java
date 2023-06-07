@@ -1,6 +1,6 @@
 package com.smartdevelopers.OpenMarket.DTO.RequestDto;
 
-import com.smartdevelopers.OpenMarket.Enum.ProductCategory;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class AddProductRequestDto
+public class CustomerRequestDto
 {
     private String name;
-    private int price;
-    private int quantity;
-    private ProductCategory productCategory;
-    private int sellerId;
+    private int age;
+    private String email;
+    private String mobNo;
+
 }

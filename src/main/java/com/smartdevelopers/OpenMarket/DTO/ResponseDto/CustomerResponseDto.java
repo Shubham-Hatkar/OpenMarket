@@ -1,17 +1,18 @@
-package com.smartdevelopers.OpenMarket.DTO.RequestDto;
+package com.smartdevelopers.OpenMarket.DTO.ResponseDto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddSellerRequestDto
+@Builder
+public class CustomerResponseDto
 {
     private String name;
-    private String mobNo;
     private String email;
-    private String aadharNo;
+    private String mobNo;
+    private int age;
 }

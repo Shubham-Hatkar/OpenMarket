@@ -1,12 +1,14 @@
 package com.smartdevelopers.OpenMarket.Controller;
 
-import com.smartdevelopers.OpenMarket.DTO.RequestDto.AddSellerRequestDto;
+import com.smartdevelopers.OpenMarket.DTO.RequestDto.SellerRequestDto;
+import com.smartdevelopers.OpenMarket.DTO.ResponseDto.SellerResponseDto;
 import com.smartdevelopers.OpenMarket.Service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/seller")
@@ -18,11 +20,11 @@ public class SellerController
 
     // Add seller
     @PostMapping("/add")
-    public String addSeller(@RequestBody AddSellerRequestDto addSellerRequestDto)
+    public String addSeller(@RequestBody SellerRequestDto sellerRequestDto)
     {
         try
         {
-            sellerService.addSeller(addSellerRequestDto);
+            sellerService.addSeller(sellerRequestDto);
         }
         catch (Exception e)
         {
@@ -32,6 +34,13 @@ public class SellerController
     }
 
     // Get all sellers
-    // Get seller by aadharcard
+    @GetMapping("/allsellers")
+    public ResponseEntity getAllSellers()
+    {
+        List<SellerResponseDto> sellers = sellerService.getAllSellers();
+        return new ResponseEntity(sellers, HttpStatus.FOUND);
+    }
+
+    // Get seller by aadharNo
     // Find seller of a particular age
 }

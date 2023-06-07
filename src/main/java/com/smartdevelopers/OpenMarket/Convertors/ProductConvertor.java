@@ -1,38 +1,36 @@
 package com.smartdevelopers.OpenMarket.Convertors;
 
-import com.smartdevelopers.OpenMarket.DTO.RequestDto.AddProductRequestDto;
-import com.smartdevelopers.OpenMarket.DTO.ResponseDto.AddProductResponseDto;
+import com.smartdevelopers.OpenMarket.DTO.RequestDto.ProductRequestDto;
+import com.smartdevelopers.OpenMarket.DTO.ResponseDto.ProductResponseDto;
 import com.smartdevelopers.OpenMarket.Enum.ProductStatus;
 import com.smartdevelopers.OpenMarket.Model.Product;
-import com.smartdevelopers.OpenMarket.Model.Seller;
-import lombok.Builder;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
 public class ProductConvertor
 {
-    public Product addProductRequestToSeller(AddProductRequestDto addProductRequestDto)
+    public Product addProductRequestToSeller(ProductRequestDto productRequestDto)
     {
         Product product = Product.builder()
-                .name(addProductRequestDto.getName())
-                .price(addProductRequestDto.getPrice())
-                .quantity(addProductRequestDto.getQuantity())
-                .productCategory(addProductRequestDto.getProductCategory())
+                .name(productRequestDto.getName())
+                .price(productRequestDto.getPrice())
+                .quantity(productRequestDto.getQuantity())
+                .productCategory(productRequestDto.getProductCategory())
                 .productStatus(ProductStatus.AVAILABLE)
                 .build();
 
         return product;
     }
 
-    public static AddProductResponseDto productToProductResponseDto(Product product)
+    public static ProductResponseDto productToProductResponseDto(Product product)
     {
-        AddProductResponseDto addProductResponseDto = AddProductResponseDto.builder()
+        ProductResponseDto productResponseDto = ProductResponseDto.builder()
                 .name(product.getName())
                 .price(product.getPrice())
                 .quantity(product.getQuantity())
                 .productStatus(ProductStatus.AVAILABLE)
                 .build();
 
-        return addProductResponseDto;
+        return productResponseDto;
     }
 }
